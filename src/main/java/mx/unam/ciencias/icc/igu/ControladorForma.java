@@ -1,0 +1,56 @@
+package mx.unam.ciencias.icc.igu;
+
+import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.stage.Stage;
+
+/**
+ * Clase abstracta para controladores del contenido de diálogo con formas que se
+ * aceptan o rechazan.
+ */
+public abstract class ControladorForma {
+
+    /** El botón para aceptar. */
+    @FXML protected Button botonAceptar;
+
+    /** La ventana del diálogo. */
+    protected Stage escenario;
+    /** Si el usuario aceptó la forma. */
+    protected boolean aceptado;
+
+    /**
+     * Manejador para cuando se activa el botón cancelar.
+     * @param evento el evento que generó la acción.
+     */
+    @FXML protected void cancelar(ActionEvent evento) {
+        // Aquí va su código.
+    }
+
+    /**
+     * Define el escenario del diálogo.
+     * @param escenario el nuevo escenario del diálogo.
+     */
+    public void setEscenario(Stage escenario) {
+        // Aquí va su código.
+    }
+
+    /**
+     * Nos dice si el usuario activó el botón de aceptar.
+     * @return <code>true</code> si el usuario activó el botón de aceptar,
+     *         <code>false</code> en otro caso.
+     */
+    public boolean isAceptado() {
+        // Aquí va su código.
+    }
+
+    /**
+     * Define el foco incial del diálogo.
+     */
+    public abstract void defineFoco();
+}
