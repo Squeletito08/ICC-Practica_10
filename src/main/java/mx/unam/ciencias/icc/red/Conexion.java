@@ -46,7 +46,17 @@ public class Conexion<R extends Registro<R, ?>> {
      * @throws IOException si ocurre un error de entrada o salida.
      */
     public Conexion(BaseDeDatos<R, ?> bdd, Socket enchufe) throws IOException {
-        // Aquí va su código.
+        this.bdd = bdd; 
+        this.enchufe = enchufe; 
+
+        escuchas = new Lista<EscuchaConexion<R>>(); 
+        in = new BufferedReader(new InputStreamReader(enchufe.getInputStream())); 
+        out = new BufferedWriter(new OutputStreamWriter(enchufe.getOutputStream()));
+
+        activa = true; 
+
+        serie = contadorSerie; 
+        contadorSerie++; 
     }
 
     /**
@@ -55,7 +65,28 @@ public class Conexion<R extends Registro<R, ?>> {
      * que lea en mensajes y reportará cada uno a los escuchas.
      */
     public void recibeMensajes() {
-        // Aquí va su código.
+
+        try{
+            String linea; 
+            while((linea = in.readLine()) != null){
+                Mensaje mensaje = Mensaje.getMensaje(linea); 
+
+                for(EscuchaConexion<R> e: escuchas)
+                    e.mensajeRecibido(this, mensaje); 
+            }
+        }
+        catch(IOException ioe){
+            if(activa){
+                for(EscuchaConexion<R> e: escuchas)
+                    e.mensajeRecibido(this, Mensaje.INVALIDO);       
+            }
+        }
+        
+        activa = false; 
+
+        for(EscuchaConexion<R> e: escuchas)
+            e.mensajeRecibido(this, Mensaje.DESCONECTAR); 
+
     }
 
     /**
@@ -63,7 +94,7 @@ public class Conexion<R extends Registro<R, ?>> {
      * @throws IOException si la base de datos no puede recibirse.
      */
     public void recibeBaseDeDatos() throws IOException {
-        // Aquí va su código.
+        bdd.carga(in);      
     }
 
     /**
@@ -71,7 +102,9 @@ public class Conexion<R extends Registro<R, ?>> {
      * @throws IOException si la base de datos no puede enviarse.
      */
     public void enviaBaseDeDatos() throws IOException {
-        // Aquí va su código.
+        bdd.guarda(out); 
+        out.newLine(); 
+        out.flush(); 
     }
 
     /**
@@ -80,7 +113,16 @@ public class Conexion<R extends Registro<R, ?>> {
      * @throws IOException si el registro no puede recibirse.
      */
     public R recibeRegistro() throws IOException {
-        // Aquí va su código.
+        R registro = bdd.creaRegistro();
+        String linea = in.readLine();  
+
+        try{
+            registro.deseria(linea);
+            return registro; 
+        }
+        catch(ExcepcionLineaInvalida excepcion){
+            throw new IOException();
+        }
     }
 
     /**
@@ -89,7 +131,9 @@ public class Conexion<R extends Registro<R, ?>> {
      * @throws IOException si el registro no puede enviarse.
      */
     public void enviaRegistro(R registro) throws IOException {
-        // Aquí va su código.
+        String linea = registro.seria(); 
+        out.write(linea);
+        out.flush(); 
     }
 
     /**
@@ -98,7 +142,9 @@ public class Conexion<R extends Registro<R, ?>> {
      * @throws IOException si el mensaje no puede enviarse.
      */
     public void enviaMensaje(Mensaje mensaje) throws IOException {
-        // Aquí va su código.
+        out.write(mensaje.toString()); 
+        out.newLine(); 
+        out.flush(); 
     }
 
     /**
@@ -106,14 +152,21 @@ public class Conexion<R extends Registro<R, ?>> {
      * @return un número de serie para cada conexión.
      */
     public int getSerie() {
-        // Aquí va su código.
+        return serie; 
     }
 
     /**
      * Cierra la conexión.
      */
     public void desconecta() {
-        // Aquí va su código.
+        activa = false; 
+        try{
+           enchufe.close();  
+        }
+        catch(IOException ioe){
+            return; 
+        }
+        
     }
 
     /**
@@ -122,7 +175,7 @@ public class Conexion<R extends Registro<R, ?>> {
      *         otro caso.
      */
     public boolean isActiva() {
-        // Aquí va su código.
+        return activa; 
     }
 
     /**
@@ -130,6 +183,6 @@ public class Conexion<R extends Registro<R, ?>> {
      * @param escucha el escucha a agregar.
      */
     public void agregaEscucha(EscuchaConexion<R> escucha) {
-        // Aquí va su código.
+        escuchas.agregaFinal(escucha); 
     }
 }

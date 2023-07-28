@@ -25,8 +25,19 @@ public class DialogoBuscaEstudiantes extends Stage {
      * @param escenario el escenario al que el diálogo pertenece.
      * @throws IOException si no se puede cargar el archivo FXML.
      */
-    public DialogoBuscaEstudiantes(Stage escenario) throws IOException {
-        // Aquí va su código.
+    public DialogoBuscaEstudiantes (Stage escenario) throws IOException {
+        ClassLoader cl = getClass().getClassLoader();
+        FXMLLoader cargador = new FXMLLoader (cl.getResource(BUSCA_ESTUDIANTES_FXML));
+        AnchorPane pagina = (AnchorPane)cargador.load();
+        setTitle("Buscar estudiantes");
+        initOwner(escenario);
+        initModality(Modality.WINDOW_MODAL);
+        Scene escena = new Scene(pagina);
+        setScene(escena);
+        controlador = cargador.getController();
+        controlador.setEscenario(this);
+        setOnShown(w -> controlador.defineFoco());
+        setResizable(false);
     }
 
     /**
@@ -35,7 +46,7 @@ public class DialogoBuscaEstudiantes extends Stage {
      *         <code>false</code> en otro caso.
      */
     public boolean isAceptado() {
-        // Aquí va su código.
+        return controlador.isAceptado();
     }
 
     /**
@@ -43,7 +54,7 @@ public class DialogoBuscaEstudiantes extends Stage {
      * @return el campo seleccionado.
      */
     public CampoEstudiante getCampo() {
-        // Aquí va su código.
+        return controlador.getCampo(); 
     }
 
     /**
@@ -51,6 +62,6 @@ public class DialogoBuscaEstudiantes extends Stage {
      * @return el valor ingresado.
      */
     public Object getValor() {
-        // Aquí va su código.
+        return controlador.getValor();
     }
 }

@@ -22,7 +22,11 @@ public abstract class ControladorFormaEstudiante extends ControladorForma {
      *         otro caso.
      */
     protected boolean verificaNombre(String nombre) {
-        // Aquí va su código.
+        if (nombre == null || nombre.isEmpty())
+            return false;
+
+        this.nombre = nombre;
+        return true;
     }
 
     /**
@@ -32,7 +36,15 @@ public abstract class ControladorFormaEstudiante extends ControladorForma {
      *         <code>false</code> en otro caso.
      */
     protected boolean verificaCuenta(String cuenta) {
-        // Aquí va su código.
+        if(cuenta == null || cuenta.isEmpty())
+            return false;
+        try{
+            this.cuenta = Integer.parseInt(cuenta);
+        }
+        catch(NumberFormatException nfe){
+            return false; 
+        }
+        return true; 
     }
 
     /**
@@ -42,7 +54,16 @@ public abstract class ControladorFormaEstudiante extends ControladorForma {
      *         otro caso.
      */
     protected boolean verificaPromedio(String promedio) {
-        // Aquí va su código.
+        if (promedio == null || promedio.isEmpty())
+            return false;
+
+        try {
+            this.promedio = Double.parseDouble(promedio);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -52,6 +73,14 @@ public abstract class ControladorFormaEstudiante extends ControladorForma {
      *         otro caso.
      */
     protected boolean verificaEdad(String edad) {
-        // Aquí va su código.
+        if (edad == null || edad . isEmpty ())
+            return false;
+        try {
+            this.edad = Integer.parseInt(edad);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+
+        return true;
     }
 }

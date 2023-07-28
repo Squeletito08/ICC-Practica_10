@@ -11,9 +11,10 @@ public class FabricaFormatoCelda<S, T>
     implements Callback<TableColumn<S, T>, TableCell<S, T>> {
 
     /* Clase interna para sobrecargar la definición de texto de la celda. */
-    private class Celda extends TableCell<S, T> {
-        @Override public void updateItem(T elemento, boolean vacio) {
-            // Aquí va su código.
+    private class Celda extends TableCell <S , T > {
+        @Override public void updateItem (T elemento, boolean vacio) {
+        super.updateItem(elemento, vacio);
+        super.setText(getTexto(elemento));
         }
     }
 
@@ -25,7 +26,7 @@ public class FabricaFormatoCelda<S, T>
      * @return el formato de la celda.
      */
     public String getFormato() {
-        // Aquí va su código.
+        return formato; 
     }
 
     /**
@@ -33,12 +34,18 @@ public class FabricaFormatoCelda<S, T>
      * @param formato el formato de la celda.
      */
     public void setFormato(String formato) {
-        // Aquí va su código.
+        this.formato = formato; 
     }
 
     /* Regresa el texto correspondiente al elemento. */
-    private String getTexto(T elemento) {
-        // Aquí va su código.
+    private String getTexto ( T elemento ) {
+        if (elemento == null)
+            return null ;
+
+        if (formato != null && elemento instanceof Number)
+            return String.format(formato, elemento);
+
+        return elemento.toString();
     }
 
     /**
@@ -46,7 +53,9 @@ public class FabricaFormatoCelda<S, T>
      * valor dentro de la misma.
      * @param columna la columa de la celda.
      */
-    @Override public TableCell<S, T> call(TableColumn<S, T> columna) {
-        // Aquí va su código.
+    @Override public TableCell <S , T >
+        call(TableColumn<S, T> columna) {
+        return new Celda ();
     }
+
 }

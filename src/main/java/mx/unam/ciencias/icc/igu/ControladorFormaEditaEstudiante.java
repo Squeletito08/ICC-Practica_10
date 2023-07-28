@@ -24,26 +24,63 @@ public class ControladorFormaEditaEstudiante
     private Estudiante estudiante;
 
     /* Inicializa el estado de la forma. */
-    @FXML private void initialize() {
-        // Aquí va su código.
+    @FXML private void initialize () {
+        entradaNombre.setVerificador(n -> verificaNombre (n));
+        entradaCuenta.setVerificador(c -> verificaCuenta(c));
+        entradaPromedio.setVerificador(p -> verificaPromedio(p));
+        entradaEdad.setVerificador(e -> verificaEdad(e));
+        entradaNombre.textProperty().addListener(
+            (o , v , n ) -> verificaEstudiante());
+        entradaCuenta.textProperty().addListener(
+            (o , v , n ) -> verificaEstudiante());
+        entradaPromedio.textProperty().addListener(
+            (o , v , n ) -> verificaEstudiante());
+        entradaEdad.textProperty().addListener(
+            (o , v , n ) -> verificaEstudiante());
     }
 
     /* Manejador para cuando se activa el botón aceptar. */
-    @FXML private void aceptar(ActionEvent evento) {
-        // Aquí va su código.
+    @FXML private void aceptar (ActionEvent evento) {
+        actualizaEstudiante();
+        aceptado = true ;
+        escenario.close();
     }
 
     /* Actualiza al estudiante, o lo crea si no existe. */
-    private void actualizaEstudiante() {
-        // Aquí va su código.
+    private void actualizaEstudiante () {
+        if (estudiante != null) {
+            estudiante.setNombre(nombre);
+            estudiante.setCuenta(cuenta);
+            estudiante.setPromedio(promedio);
+            estudiante.setEdad(edad);
+        } else {
+            estudiante = new Estudiante(nombre, cuenta,
+                         promedio,edad);
+        }
     }
 
     /**
      * Define el estudiante del diálogo.
      * @param estudiante el nuevo estudiante del diálogo.
      */
-    public void setEstudiante(Estudiante estudiante) {
-        // Aquí va su código.
+    public void setEstudiante (Estudiante estudiante) {
+        this.estudiante = estudiante;
+        if (estudiante == null)
+            return;
+
+        this.estudiante = new Estudiante(null, 0, 0, 0);
+        this.estudiante.actualiza(estudiante);
+
+        entradaNombre.setText(estudiante.getNombre());
+
+        String c = String.format("%09d", estudiante.getCuenta());
+        entradaCuenta.setText(c);
+
+        String p = String.format("%2.2f", estudiante.getPromedio());
+        entradaPromedio.setText(p);
+
+        String e = String.valueOf(estudiante.getEdad());
+        entradaEdad.setText(e);
     }
 
     /**
@@ -51,7 +88,7 @@ public class ControladorFormaEditaEstudiante
      * @return el estudiante del diálogo.
      */
     public Estudiante getEstudiante() {
-        // Aquí va su código.
+        return estudiante; 
     }
 
     /**
@@ -59,19 +96,23 @@ public class ControladorFormaEditaEstudiante
      * @param verbo el nuevo verbo del botón de aceptar.
      */
     public void setVerbo(String verbo) {
-        // Aquí va su código.
+        botonAceptar.setText(verbo);
     }
 
     /**
      * Define el foco incial del diálogo.
      */
     @Override public void defineFoco() {
-        // Aquí va su código.
+        entradaNombre.requestFocus(); 
     }
 
     /* Verifica que los cuatro campos sean válidos. */
     private void verificaEstudiante() {
-        // Aquí va su código.
+        boolean n = entradaNombre.esValida();
+        boolean c = entradaCuenta.esValida();
+        boolean p = entradaPromedio.esValida();
+        boolean e = entradaEdad.esValida();
+        botonAceptar.setDisable(!n || !c || !p || !e);
     }
 
     /**
@@ -81,7 +122,7 @@ public class ControladorFormaEditaEstudiante
      *         <code>false</code> en otro caso.
      */
     @Override protected boolean verificaCuenta(String cuenta) {
-        // Aquí va su código.
+        return super.verificaCuenta(cuenta) && this.cuenta >= 10000000 && this.cuenta < 999999999;
     }
 
     /**
@@ -91,7 +132,7 @@ public class ControladorFormaEditaEstudiante
      *         otro caso.
      */
     @Override protected boolean verificaPromedio(String promedio) {
-        // Aquí va su código.
+        return super.verificaPromedio(promedio) && this.promedio >= 0.0 && this.promedio <= 10.0;
     }
 
     /**
@@ -101,6 +142,6 @@ public class ControladorFormaEditaEstudiante
      *         otro caso.
      */
     @Override protected boolean verificaEdad(String edad) {
-        // Aquí va su código.
+        return super.verificaEdad(edad) && this.edad >= 13 && this.edad <= 99;
     }
 }

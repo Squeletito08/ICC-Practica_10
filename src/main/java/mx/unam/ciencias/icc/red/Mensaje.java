@@ -75,7 +75,42 @@ public enum Mensaje {
      * @return el mensaje correspondiente a la línea.
      */
     public static Mensaje getMensaje(String mensaje) {
-        // Aquí va su código.
+
+        if(mensaje == null)
+            return INVALIDO; 
+        
+        if(!mensaje.contains("|=MENSAJE:"))
+            return INVALIDO; 
+        
+        String mensaje_limpio = mensaje.substring(10); 
+
+        switch (mensaje_limpio) {
+            case "BASE_DE_DATOS":
+                return BASE_DE_DATOS; 
+
+            case "REGISTRO_ELIMINADO":
+                return REGISTRO_ELIMINADO; 
+
+            case "REGISTRO_AGREGADO": 
+                return REGISTRO_AGREGADO; 
+
+            case "REGISTRO_MODIFICADO": 
+                return REGISTRO_MODIFICADO; 
+
+            case "DESCONECTAR": 
+                return DESCONECTAR; 
+
+            case "GUARDA":
+                return GUARDA; 
+
+            case "DETENER_SERVICIO": 
+                return DETENER_SERVICIO; 
+
+            case "ECO": 
+                return ECO; 
+
+            default: return INVALIDO;     
+        }
     }
 
     /**
@@ -83,6 +118,34 @@ public enum Mensaje {
      * @return la cadena con el mensaje correspondiente al mensaje.
      */
     @Override public String toString() {
-        // Aquí va su código.
+        
+        switch(this){
+            case BASE_DE_DATOS: 
+                return PREFIJO+"BASE_DE_DATOS"; 
+
+            case REGISTRO_AGREGADO: 
+                return PREFIJO+"REGISTRO_AGREGADO"; 
+
+            case REGISTRO_ELIMINADO: 
+                return PREFIJO+"REGISTRO_ELIMINADO"; 
+
+            case REGISTRO_MODIFICADO: 
+                return PREFIJO+"REGISTRO_MODIFICADO"; 
+
+            case DESCONECTAR: 
+                return PREFIJO+"DESCONECTAR"; 
+
+            case GUARDA: 
+                return PREFIJO+"GUARDA"; 
+
+            case DETENER_SERVICIO: 
+                return PREFIJO+"DETENER_SERVICIO"; 
+
+            case ECO: 
+                return PREFIJO+"ECO"; 
+
+            default: 
+                return PREFIJO+"INVALIDO";  
+        }
     }
 }

@@ -14,7 +14,7 @@ public class EntradaVerificable extends TextField {
      * Define el estado inicial de una entrada verificable.
      */
     public EntradaVerificable() {
-        // Aquí va su código.
+        verificador = e -> false; 
     }
 
     /**
@@ -22,7 +22,7 @@ public class EntradaVerificable extends TextField {
      * @param verificador el nuevo verificador de la entrada.
      */
     public void setVerificador(Verificador verificador) {
-        // Aquí va su código.
+        this.verificador = verificador; 
     }
 
     /**
@@ -30,7 +30,10 @@ public class EntradaVerificable extends TextField {
      * @return <code>true</code> si la entrada es válida, <code>false</code> en
      *         otro caso.
      */
-    public boolean esValida() {
-        // Aquí va su código.
+    public boolean esValida () {
+        boolean b = verificador.verifica(getText());
+        String s = b ? "" : "-fx-background-color:FFCCCCCC;";
+        setStyle(s);
+        return b;
     }
 }

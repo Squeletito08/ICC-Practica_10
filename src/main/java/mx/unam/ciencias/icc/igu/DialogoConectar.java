@@ -25,7 +25,18 @@ public class DialogoConectar extends Stage {
      * @throws IOException si no se puede cargar el archivo FXML.
      */
     public DialogoConectar(Stage escenario) throws IOException {
-        // Aquí va su código.
+        ClassLoader cl = getClass().getClassLoader();
+        FXMLLoader cargador = new FXMLLoader (cl.getResource(CONECTAR_FXML));
+        AnchorPane pagina = (AnchorPane)cargador.load();
+        setTitle("Conectar");
+        initOwner(escenario);
+        initModality(Modality.WINDOW_MODAL);
+        Scene escena = new Scene(pagina);
+        setScene(escena);
+        controlador = cargador.getController();
+        controlador.setEscenario(this);
+        setOnShown(w -> controlador.defineFoco());
+        setResizable(false);
     }
 
     /**
@@ -34,7 +45,7 @@ public class DialogoConectar extends Stage {
      *         <code>false</code> en otro caso.
      */
     public boolean isAceptado() {
-        // Aquí va su código.
+        return controlador.isAceptado(); 
     }
 
     /**
@@ -42,7 +53,7 @@ public class DialogoConectar extends Stage {
      * @return la dirección del diálogo.
      */
     public String getDireccion() {
-        // Aquí va su código.
+        return controlador.getDireccion(); 
     }
 
     /**
@@ -50,6 +61,6 @@ public class DialogoConectar extends Stage {
      * @return el puerto del diálogo.
      */
     public int getPuerto() {
-        // Aquí va su código.
+        return controlador.getPuerto(); 
     }
 }

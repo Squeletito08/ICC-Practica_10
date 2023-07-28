@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
- * Clase para clientes con interfaz gráfica del servidor de la base de datos.
+ * Clase para aplicaciones con interfaz gráfica de la base de datos.
  */
 public class Aplicacion extends Application {
 
@@ -26,6 +26,19 @@ public class Aplicacion extends Application {
      * @throws Exception si algo sale mal.
      */
     @Override public void start(Stage escenario) throws Exception {
-        // Aquí va su código.
+        ClassLoader cl = getClass().getClassLoader();
+        String url = cl.getResource(ICONO_CIENCIAS).toString();
+        escenario.getIcons().add(new Image(url));
+        escenario.setTitle("Administrador de Estudiantes");
+        FXMLLoader cargador;
+        cargador = new FXMLLoader(cl.getResource(INTERFAZ_ESTUDIANTES_FXML));
+        BorderPane interfazEstudiantes =(BorderPane)cargador.load();
+        ControladorInterfazEstudiantes controlador = cargador.getController();
+        controlador.setEscenario(escenario);
+
+        Scene escena = new Scene(interfazEstudiantes);
+        escenario.setScene(escena);
+        escenario.setOnCloseRequest(e -> controlador.salir(e));
+        escenario.show();
     }
 }

@@ -29,7 +29,8 @@ public abstract class ControladorForma {
      * @param evento el evento que generó la acción.
      */
     @FXML protected void cancelar(ActionEvent evento) {
-        // Aquí va su código.
+        aceptado = false;
+        escenario.close();
     }
 
     /**
@@ -37,7 +38,12 @@ public abstract class ControladorForma {
      * @param escenario el nuevo escenario del diálogo.
      */
     public void setEscenario(Stage escenario) {
-        // Aquí va su código.
+        this.escenario = escenario;
+        Scene escena = escenario.getScene();
+        KeyCodeCombination combinacion = new KeyCodeCombination (KeyCode.ENTER,
+                                         KeyCombination.CONTROL_DOWN);
+        ObservableMap <KeyCombination,Runnable> accs = escena.getAccelerators();
+        accs.put (combinacion, () -> botonAceptar.fire());
     }
 
     /**
@@ -46,7 +52,7 @@ public abstract class ControladorForma {
      *         <code>false</code> en otro caso.
      */
     public boolean isAceptado() {
-        // Aquí va su código.
+        return aceptado; 
     }
 
     /**

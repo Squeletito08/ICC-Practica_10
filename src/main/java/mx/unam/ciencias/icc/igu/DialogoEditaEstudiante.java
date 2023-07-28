@@ -14,7 +14,7 @@ import mx.unam.ciencias.icc.Estudiante;
 public class DialogoEditaEstudiante extends Stage {
 
     /* Vista de la forma para agregar/editar estudiantes. */
-    private static final String EDITA_ESTUDIANTE_FXML =
+    private static final String ESTUDIANTE_FXML =
         "fxml/forma-edita-estudiante.fxml";
 
     /* El controlador. */
@@ -27,10 +27,31 @@ public class DialogoEditaEstudiante extends Stage {
      *                   un estudiante.
      * @throws IOException si no se puede cargar el archivo FXML.
      */
-    public DialogoEditaEstudiante(Stage escenario,
-                                  Estudiante estudiante) throws IOException {
-        // Aquí va su código.
+    public DialogoEditaEstudiante (Stage escenario,
+                                   Estudiante estudiante) 
+                                   throws IOException {
+        ClassLoader cl = getClass().getClassLoader();
+        FXMLLoader cargador = new FXMLLoader(cl.getResource(ESTUDIANTE_FXML));
+        AnchorPane pagina = (AnchorPane)cargador.load();
+        initOwner(escenario);
+        initModality(Modality.WINDOW_MODAL);
+        Scene escena = new Scene(pagina);
+        setScene(escena);
+        controlador = cargador.getController();
+        controlador.setEscenario(this);
+        controlador.setEstudiante(estudiante);
+
+        if (estudiante == null) {
+            setTitle("Agregar estudiante");
+            controlador.setVerbo("Agregar");
+        } else {
+            setTitle("Editar estudiante");
+            controlador.setVerbo("Actualizar");
+        }
+        setOnShown(w -> controlador.defineFoco());
+        setResizable (false ); 
     }
+
 
     /**
      * Nos dice si el usuario activó el botón de aceptar.
@@ -38,14 +59,14 @@ public class DialogoEditaEstudiante extends Stage {
      *         <code>false</code> en otro caso.
      */
     public boolean isAceptado() {
-        // Aquí va su código.
+        return controlador.isAceptado(); 
     }
 
-    /**
+    /** 
      * Regresa el estudiante del diálogo.
      * @return el estudiante del diálogo.
      */
     public Estudiante getEstudiante() {
-        // Aquí va su código.
+        return controlador.getEstudiante();
     }
 }

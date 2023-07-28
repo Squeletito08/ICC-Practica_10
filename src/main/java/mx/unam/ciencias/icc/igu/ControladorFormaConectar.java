@@ -20,27 +20,48 @@ public class ControladorFormaConectar extends ControladorForma {
 
     /* Inicializa el estado de la forma. */
     @FXML private void initialize() {
-        // Aquí va su código.
+        entradaDireccion.setVerificador(s -> verificaDireccion(s));
+        entradaPuerto.setVerificador(p -> verificaPuerto(p));
+
+        entradaDireccion.textProperty().addListener(
+                (o, v, n) -> conexionValida());
+        entradaPuerto.textProperty().addListener(
+                (o, v, n) -> conexionValida());
     }
 
     /* Manejador para cuando se activa el botón conectar. */
     @FXML private void conectar(ActionEvent evento) {
-        // Aquí va su código.
+        aceptado = true;
+        escenario.close();
     }
 
     /* Determina si los campos son válidos. */
     private void conexionValida() {
-        // Aquí va su código.
+        boolean s = entradaDireccion.esValida();
+        boolean p = entradaPuerto.esValida();
+        botonAceptar.setDisable(!s || !p);
     }
 
     /* Verifica que la dirección sea válido. */
     private boolean verificaDireccion(String s) {
-        // Aquí va su código.
+        if (s == null || s.isEmpty())
+            return false;
+        direccion = s;
+        return true;
     }
 
     /* Verifica que el puerto sea válido. */
     private boolean verificaPuerto(String p) {
-        // Aquí va su código.
+        if (p == null || p.isEmpty())
+            return false;
+        try {
+            puerto = Integer.parseInt(p);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        if (puerto < 1025 || puerto > 65535)
+            return false;
+        return true;
     }
 
     /**
@@ -48,7 +69,7 @@ public class ControladorFormaConectar extends ControladorForma {
      * @return la dirección del diálogo.
      */
     public String getDireccion() {
-        // Aquí va su código.
+        return entradaDireccion.getText();
     }
 
     /**
@@ -56,13 +77,13 @@ public class ControladorFormaConectar extends ControladorForma {
      * @return el puerto del diálogo.
      */
     public int getPuerto() {
-        // Aquí va su código.
+          return Integer.parseInt(entradaPuerto.getText());
     }
 
     /**
      * Define el foco incial del diálogo.
      */
     @Override public void defineFoco() {
-        // Aquí va su código.
+         entradaDireccion.requestFocus();
     }
 }

@@ -410,7 +410,7 @@ public class TestServidorBaseDeDatosEstudiantes {
     /**
      * Prueba unitaria para {@link ServidorBaseDeDatosEstudiantes#agregaEscucha}
      * al realizar conexiones.
-     */
+    */
     @Test public void testAgregaEscucha() {
         UtilRed.espera(10);
         Lista<String> mensajes = new Lista<String>();
@@ -482,6 +482,7 @@ public class TestServidorBaseDeDatosEstudiantes {
         Assert.assertTrue(c.recibeCadena() == null);
         sbdd.limpiaEscuchas();
     }
+    
 
     /**
      * Prueba unitaria para {@link

@@ -28,7 +28,15 @@ public class Arreglos {
      */
     public static <T> void
     selectionSort(T[] arreglo, Comparator<T> comparador) {
-        // Aquí va su código.
+
+        for(int i = 0; i < arreglo.length; i++){
+            int m = i; 
+            for(int j = i+1; j < arreglo.length; j++){
+                if(comparador.compare(arreglo[j],arreglo[m]) < 0)
+                    m = j; 
+            }
+            intercambia(arreglo,i,m);
+        }
     }
 
     /**
@@ -49,7 +57,32 @@ public class Arreglos {
      */
     public static <T> void
     quickSort(T[] arreglo, Comparator<T> comparador) {
-        // Aquí va su código.
+        quickSortAuxiliar(arreglo,comparador,0,arreglo.length-1);
+    }
+
+    private static <T> void quickSortAuxiliar (T[] arreglo, Comparator<T> comp, int a, int b){
+        if(b <= a)
+            return; 
+        int i = a + 1; 
+        int j = b; 
+        while(i < j){
+            if(comp.compare(arreglo[i],arreglo[a]) > 0 && comp.compare(arreglo[j],arreglo[a]) <= 0 ){
+                intercambia(arreglo,i,j);
+                i++; 
+                j--;
+            }
+            else if(comp.compare(arreglo[i],arreglo[a]) <= 0)
+                i++;
+            else //(comp(arreglo[j],arreglo[a]) > 0)
+                j--;
+        }
+
+        if(comp.compare(arreglo[i],arreglo[a]) > 0)
+            i--; 
+        intercambia(arreglo,i,a);
+        quickSortAuxiliar(arreglo,comp,a,i-1);
+        quickSortAuxiliar(arreglo,comp,i+1,b);
+        return;     
     }
 
     /**
@@ -76,6 +109,29 @@ public class Arreglos {
      */
     public static <T> int
     busquedaBinaria(T[] arreglo, T elemento, Comparator<T> comparador) {
-        // Aquí va su código.
+        return busquedaBinariaAuxiliar(arreglo,elemento,comparador,0,arreglo.length-1);
+    }
+
+    private static <T> int busquedaBinariaAuxiliar(T[] arreglo, T elemento, Comparator<T> comparador, int a, int b){
+        if(b < a)
+            return -1; 
+
+        int m = a + ((b-a)/2);
+
+        if(comparador.compare(elemento,arreglo[m]) == 0)
+            return m; 
+        else if(comparador.compare(elemento,arreglo[m]) < 0){
+            return busquedaBinariaAuxiliar(arreglo,elemento,comparador,a,m-1);
+        }
+        else if (comparador.compare(elemento,arreglo[m]) > 0){
+            return busquedaBinariaAuxiliar(arreglo,elemento,comparador,m+1,b);
+        }
+        return -1;
+    }
+
+    private static <T> void intercambia(T[] arreglo, int i, int m){
+        T aux = arreglo[i];
+        arreglo[i] = arreglo[m];
+        arreglo[m] = aux;
     }
 }
